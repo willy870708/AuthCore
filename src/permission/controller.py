@@ -8,7 +8,7 @@ router = APIRouter(
     tags=["Permission"] 
 )
 
-@router.get("/get_permission/{user_id}")
-def get_user_permission(user_id: int, db: DbSession):
-    return service.get_user_permissions(db, user_id)
+@router.get("/get_permission/{user_number}")
+def get_user_permission(user_number: str, db: DbSession):
+    return service.get_user_permissions(db, user_number)
 
