@@ -1,0 +1,26 @@
+# Environment variables and API keys
+.env
+
+# Python-related files and directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Celery-related files
+celerybeat-schedule*
+celeryd.pid
+
+# Log files
+*.log
+logs/
+
+# Operating system files
+.DS_Store # macOS
+Thumbs.db # Windows
