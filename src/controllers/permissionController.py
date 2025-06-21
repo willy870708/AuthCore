@@ -3,7 +3,7 @@ from ..database.core import DbSession
 from typing import Annotated, List
 
 from ..dependencies.container import DependencyContainer
-from ..dependencies.interface import IPermissionService
+from ..services.interface.permissionService import IPermissionService
 from ..models.responseModels.PermissionResModel import PermissionResModel
 
 

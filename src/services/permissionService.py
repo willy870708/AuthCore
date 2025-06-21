@@ -1,10 +1,9 @@
-from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import List
 
 from ..models.responseModels.PermissionResModel import PermissionResModel
 from ..baseService import baseService
-from ..dependencies.interface import IPermissionService
+from ..services.interface.permissionService import IPermissionService
 
 class PermissionService(baseService, IPermissionService):
 

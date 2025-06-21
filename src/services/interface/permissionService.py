@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ..models.responseModels.PermissionResModel import PermissionResModel
+from ...models.responseModels.PermissionResModel import PermissionResModel
 
 class IPermissionService(ABC):
     
