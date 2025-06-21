@@ -17,3 +17,5 @@ htmlcov/
 # Log files
 *.log
 logs/
+
+settings.json
