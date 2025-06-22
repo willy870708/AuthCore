@@ -28,11 +28,11 @@ class PermissionService(baseService, IPermissionService):
         db = self.db
         permissions_data = [(req.role_id, req.resource_id) for req in reqAddPermissions]
         with db.begin() as transaction:
-            sql_call_func = text("SELECT PUBLIC.FN_ADD_PERMISSIONS(CAST(:permissions_data AS PUBLIC.TYPE_PERMISSION_INPUT[]))")
+            sql_call_func = text("SELECT PUBLIC.FN_ADD_PERMISSIONS(CAST(:PERMISSIONS_DATA AS PUBLIC.TYPE_PERMISSION_INPUT[]))")
             
             result = db.execute(
                 sql_call_func,
-                {"permissions_data": permissions_data}
+                {"PERMISSIONS_DATA": permissions_data}
             )
             
             insert_count = result.scalar_one()
