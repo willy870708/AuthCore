@@ -36,4 +36,5 @@ class PermissionService(baseService, IPermissionService):
             )
             
             insert_count = result.scalar_one()
+        
         return insert_count
