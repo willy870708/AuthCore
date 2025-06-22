@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..database.core import get_db, DbSession
 from ..services.permissionService import PermissionService
-from ..services.interface.permissionService import IPermissionService
+from ..services.interface.iPermissionService import IPermissionService
 
 
 class DependencyContainer:

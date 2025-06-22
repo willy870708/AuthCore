@@ -3,7 +3,8 @@ from typing import List
 
 from ..models.responseModels.PermissionResModel import PermissionResModel
 from ..baseService import baseService
-from ..services.interface.permissionService import IPermissionService
+from .interface.iPermissionService import IPermissionService
+from ..models.requestModels.addPermissionReqModel import addPermissionReqModel
 
 class PermissionService(baseService, IPermissionService):
 
@@ -22,3 +23,17 @@ class PermissionService(baseService, IPermissionService):
             results = [PermissionResModel(**dict(zip(result.keys(), row))) for row in rows]
 
         return results
+    
+    def add_permissions(self, reqAddPermissions: List[addPermissionReqModel]) -> int:
+        db = self.db
+        permissions_data = [(req.role_id, req.resource_id) for req in reqAddPermissions]
+        with db.begin() as transaction:
+            sql_call_func = text("SELECT PUBLIC.FN_ADD_PERMISSIONS(CAST(:permissions_data AS PUBLIC.TYPE_PERMISSION_INPUT[]))")
+            
+            result = db.execute(
+                sql_call_func,
+                {"permissions_data": permissions_data}
+            )
+            
+            insert_count = result.scalar_one()
+        return insert_count
