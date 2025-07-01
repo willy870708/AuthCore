@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from typing import List
 
-from ..models.responseModels.PermissionResModel import PermissionResModel
+from ..models.responseModels.permissionResModel import PermissionResModel
 from ..baseService import baseService
 from .interface.iPermissionService import IPermissionService
 from ..models.requestModels.addPermissionReqModel import addPermissionReqModel
