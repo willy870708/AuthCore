@@ -16,5 +16,5 @@ def login(data: OAuth2PasswordRequestForm = Depends(), auth_service: IAuthServic
     token = auth_service.login(data.username, data.password)
     if not token:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
-    
+
     return token

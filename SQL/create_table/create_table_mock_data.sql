@@ -530,7 +530,8 @@ CREATE TABLE public.users (
     full_name character varying(100),
     is_active boolean DEFAULT true NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+	last_login_time timestamp with time zone DEFAULT now()
 );
 
 

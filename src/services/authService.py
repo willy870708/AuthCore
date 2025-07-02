@@ -22,29 +22,37 @@ class AuthService(IAuthService):
     def __init__(self, db: Session):
         self.db = db
 
-    def login(self, user_number, password) -> TokenResModel:
-        db = self.db
+    def login(self, user_number, password) -> TokenResModel:      
         
-        sql_call_function = text("SELECT * FROM PUBLIC.FN_GET_USER_PASSWORD(:USER_NUMBER);")
-        result = db.execute(
-            sql_call_function,
-            {"USER_NUMBER": user_number}
-        )
-        
-        login_info = result.first()
-        if not login_info:
-            return None
-        
-        login_info_model = LoginResModel(**dict(zip(result.keys(), login_info)))
-        
-        if not pwd_context.verify(password, login_info_model.hashed_password):
-            return None
+        with self.db.begin() as transaction:
+            sql_call_function = text("SELECT * FROM PUBLIC.FN_GET_USER_PASSWORD(:USER_NUMBER);")
+            result = self.db.execute(
+                sql_call_function,
+                {"USER_NUMBER": user_number}
+            )
+            
+            login_info = result.first()
+            if not login_info:
+                return None
+            
+            login_info_model = LoginResModel(**dict(zip(result.keys(), login_info)))
+            
+            if not pwd_context.verify(password, login_info_model.hashed_password):
+                return None
 
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        to_encode = {
-            "sub": login_info.user_number,
-            "exp": datetime.now() + access_token_expires
-        }
-        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+            access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+            to_encode = {
+                "sub": login_info.user_number,
+                "exp": datetime.now() + access_token_expires
+            }
+            encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        
+            # update user's login time
+            sql_call_func = text("SELECT PUBLIC.FN_UPDATE_USER_LOGIN_TIME(:USER_NUMBER)")
+            
+            self.db.execute(
+                sql_call_func,
+                {"USER_NUMBER": user_number}
+            )
         
         return TokenResModel(access_token=encoded_jwt, token_type="bearer")
