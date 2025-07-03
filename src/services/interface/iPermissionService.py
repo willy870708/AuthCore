@@ -10,4 +10,7 @@ class IPermissionService(ABC):
     def get_user_permissions(self, user_number: str) -> List[PermissionResModel]: pass
     
     @abstractmethod
-    def add_permissions(reqAddPermissions: List[addPermissionReqModel]) -> int: pass
+    def add_permissions(self, reqAddPermissions: List[addPermissionReqModel]) -> int: pass
+    
+    @abstractmethod
+    def add_permissions_by_csv(self, file) -> int: pass

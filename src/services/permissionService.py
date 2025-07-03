@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from typing import List
+import pandas as pd
 
 from ..models.responseModels.permissionResModel import PermissionResModel
 from ..baseService import baseService
@@ -36,3 +37,23 @@ class PermissionService(baseService, IPermissionService):
             insert_count = result.scalar_one()
         
         return insert_count
+    
+    def add_permissions_by_csv(self, file) -> int:
+        total_add_count = 0
+        chunk_size = 1000
+        
+
+        for chunck_df in pd.read_csv(file, chunksize=chunk_size, encoding="utf-8"):
+            permission_list: List[addPermissionReqModel] = []
+            try:
+                for index, row in chunck_df.iterrows():
+                    permission = addPermissionReqModel(role_id = row.get("role_id"), resource_id=row.get("resource_id"))
+                    permission_list.append(permission)
+                
+                total_add_count += self.add_permissions(permission_list)
+
+            except Exception as e:
+                print(f"failed: processing error in chunk:{total_add_count}, message: {e}")
+                continue
+                
+        return total_add_count
