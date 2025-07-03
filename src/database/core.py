@@ -1,10 +1,14 @@
+"""
+this file is about database setting
+"""
+
+import os
 from typing import Annotated
 from fastapi import Depends
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 
-import os
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="src/.env")
@@ -18,11 +22,16 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+
 def get_db():
+    """
+    get db connection
+    """
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 DbSession = Annotated[Session, Depends(get_db)]

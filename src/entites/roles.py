@@ -1,8 +1,16 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+"""
+roles table from database
+"""
+
+from sqlalchemy import Column, Integer, String
 from ..database.core import Base
 
-class Role(Base):
+
+class Roles(Base):
+    """
+    roles table from database
+    """
+
     __tablename__ = "roles"
     id = Column(Integer, primary_key=True, index=True)
     system_id = Column(String)

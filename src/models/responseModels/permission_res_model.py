@@ -1,6 +1,15 @@
+"""
+permission response model
+"""
+
 from pydantic import BaseModel
 
+
 class PermissionResModel(BaseModel):
+    """
+    permission response model
+    """
+
     resource_id: int
     system_id: int
     resource_name: str
