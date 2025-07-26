@@ -5,6 +5,7 @@ permission service interface
 from abc import ABC, abstractmethod
 from typing import List
 
+from ...models.requestModels.permission_req_model import PermissionReqModel
 from ...models.responseModels.permission_res_model import PermissionResModel
 from ...models.requestModels.add_permission_req_model import AddPermissionReqModel
 
@@ -15,12 +16,14 @@ class IPermissionService(ABC):
     """
 
     @abstractmethod
-    def get_user_permissions(self, user_number: str) -> List[PermissionResModel]:
+    def get_user_permissions(
+        self, permission_req_model: PermissionReqModel
+    ) -> List[PermissionResModel]:
         """
         get user's permissions
 
         Args:
-            param1 str: user_number
+            param1 PermissionReqModel: permission_req_model
 
         Returns:
             List[PermissionResModel]: list of permission response model

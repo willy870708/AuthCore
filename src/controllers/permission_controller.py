@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 
 from ..dependencies.container import get_permission_service, get_current_user
 from ..services.interface.i_permission_service import IPermissionService
+from ..models.requestModels.permission_req_model import PermissionReqModel
 from ..models.responseModels.permission_res_model import PermissionResModel
 from ..models.requestModels.add_permission_req_model import AddPermissionReqModel
 
@@ -19,9 +20,9 @@ get user permission
 """
 
 
-@router.get("/get_permission/{user_number}")
+@router.post("/get_permission")
 def get_user_permission(
-    user_number: str,
+    permission_req_model: PermissionReqModel,
     service: Annotated[IPermissionService, Depends(get_permission_service)],
     _: str = Depends(get_current_user),
 ) -> List[PermissionResModel]:
@@ -29,7 +30,7 @@ def get_user_permission(
     get user permission
 
     Args:
-        param1 (str): user number
+        param1 PermissionReqModel: permission_req_model
 
     Returns:
         list[PermissionResModel]: permissions list
@@ -37,7 +38,7 @@ def get_user_permission(
     Raises:
 
     """
-    return service.get_user_permissions(user_number)
+    return service.get_user_permissions(permission_req_model)
 
 
 @router.post("/add_permission")

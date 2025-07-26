@@ -7,6 +7,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 import pandas as pd
 
+from ..models.requestModels.permission_req_model import PermissionReqModel
 from ..models.responseModels.permission_res_model import PermissionResModel
 from ..base_service import BaseService
 from .interface.i_permission_service import IPermissionService
@@ -18,13 +19,31 @@ class PermissionService(BaseService, IPermissionService):
     permission service
     """
 
-    def get_user_permissions(self, user_number: str) -> List[PermissionResModel]:
+    def get_user_permissions(
+        self, permission_req_model: PermissionReqModel
+    ) -> List[PermissionResModel]:
 
         sql_call_func = text(
-            "SELECT * FROM PUBLIC.FN_GET_PERMISSION_BY_USER_ID(:USER_NUMBER);"
+            """
+            SELECT * FROM PUBLIC.FN_GET_PERMISSION_BY_CONDITION(
+                :USER_NUMBER,
+                :GRANTED_START_DATE,
+                :GRANTED_END_DATE,
+                :SYSTEM_ID,
+                :PAGE_NO,
+                :PAGE_SIZE
+            );
+            """
         )
-
-        result = self.db.execute(sql_call_func, {"USER_NUMBER": user_number})
+        params = {
+            "USER_NUMBER": permission_req_model.user_number,
+            "GRANTED_START_DATE": permission_req_model.granted_start_date,
+            "GRANTED_END_DATE": permission_req_model.granted_end_date,
+            "SYSTEM_ID": permission_req_model.system_id,
+            "PAGE_NO": permission_req_model.page_no,
+            "PAGE_SIZE": permission_req_model.page_size,
+        }
+        result = self.db.execute(sql_call_func, params)
 
         rows = result.fetchall()
         results = [PermissionResModel(**dict(zip(result.keys(), row))) for row in rows]
